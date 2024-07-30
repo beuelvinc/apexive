@@ -1,0 +1,41 @@
+version: '3.7'
+services:
+  db:
+    image: postgres:12
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${USER}
+      POSTGRES_PASSWORD:  ${PASSWORD}
+      POSTGRES_DB: ${NAME}
+
+
+  django_gunicorn:
+      image: myweb:myweb1
+      env_file:
+        - .env
+      build:
+        context: .
+      ports:
+        - "8000:8000"
+      depends_on:
+        - db
+      command: >
+          sh -c "./wait-for-it/wait-for-it.sh db:5432 && python manage.py migrate --no-input && python manage.py collectstatic --no-input && gunicorn riga_idea.wsgi:application --bind 0.0.0.0:8000"
+      volumes:
+        - static:/app/static_root/
+  nginx:
+      image: mynginx:mynginx1
+      build: ./nginx
+      ports:
+        - "80:80"
+      depends_on:
+        - django_gunicorn
+      volumes:
+        - static:/app/static_root/
+
+volumes:
+  static:
+
