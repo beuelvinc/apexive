@@ -1,0 +1,24 @@
+[project]
+name = "apexive_project"
+version = "0.1.0"
+description = "A Django web application"
+authors = [
+    { name = "Elvin", email = "Elvin@example.com" }
+]
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.7"
+
+dependencies = [
+    "asgiref==3.8.1",
+    "Django==5.0.7",
+    "djangorestframework==3.15.2",
+    "gunicorn==22.0.0",
+    "packaging==24.1",
+    "psycopg2-binary==2.9.9",
+    "sqlparse==0.5.1",
+    "tzdata==2024.1"
+]
+
+[tool.setuptools]
+packages = ["apexive_project"]
