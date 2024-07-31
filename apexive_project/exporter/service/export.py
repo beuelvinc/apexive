@@ -10,6 +10,9 @@ class ExportData:
         self.helper = Helper()
 
     def export(self) -> None:
-        data = self.helper.read_data_from_database()
+        data = self.helper.read_data_from_database("aircraft")
+        self.helper.export_data_to_csv(data, ExportData.IMPORT_FILE_NAME)
+
+        data = self.helper.read_data_from_database("flight")
         self.helper.export_data_to_csv(data, ExportData.IMPORT_FILE_NAME)
 

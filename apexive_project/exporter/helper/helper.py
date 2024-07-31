@@ -1,10 +1,10 @@
+import csv
 import os
 from itertools import chain
-from typing import List, Dict, Any
-
+from typing import Any
 from django.conf import settings
-from pilotlog_app.models import Aircraft, Airfield, Flight, ImagePic, LimitRules, MyQuery, MyQueryBuild, Pilot, Qualification, SettingConfig
-
+from pilotlog_app.models import Aircraft, Airfield, Flight, ImagePic, LimitRules, MyQuery, MyQueryBuild, Pilot, \
+    Qualification, SettingConfig
 
 
 class Helper:
@@ -12,28 +12,21 @@ class Helper:
     This class serving helper role for service class
     """
 
-    def read_data_from_database(self) -> list[dict[str, str | Any]]:
-        return self.__read_data_from_database()
+    def read_data_from_database(self,model_name: str) -> list[dict[str, str | Any]]:
+        return self.__read_data_from_database(model_name)
 
-    @staticmethod
-    def __read_data_from_database() -> list[dict[str, str | Any]]:
+    def __read_data_from_database(self, model_name: str) -> list[dict[str, str | Any]]:
         """
         Reads data from DB tables
         :return:
         """
         try:
-            aircraft_queryset = Aircraft.objects.all()
-            flight_queryset = Flight.objects.all()
-            combined_queryset = list(chain(aircraft_queryset, flight_queryset))
-            data = [
-                {'model': 'Aircraft', 'data': obj.__dict__}
-                for obj in combined_queryset
-            ]
-            return data
+            model = self.__get_model().get(model_name)
+            return model.objects.all()
         except Exception as err:
             print(err)
 
-    def export_data_to_csv(self, data: dict, file_name: str,):
+    def export_data_to_csv(self, data: dict, file_name: str, ):
         """
 
         :param file_name: name of file to write
@@ -41,18 +34,30 @@ class Helper:
         :return: None
         """
         path_to_write = os.path.join(settings.BASE_DIR, "0_data", file_name)
-        self.__delete_if_exists(path_to_write)
+        # self.__delete_if_exists(path_to_write)
         self.__export_data_to_csv(path_to_write, data)
 
-    @staticmethod
-    def __export_data_to_csv(path: str, data: dict):
+    def __export_data_to_csv(self, path: str, data: dict):
         """
         :param path: path of file to write data
         :param data: data from database
         :return: None
         """
         try:
-            print(data)
+
+            with open(path, 'w', newline='') as csvfile:
+                fieldnames = ['user_id', 'guid', 'platform', '_modified', 'meta']
+                writer = csv.writer(csvfile)
+                writer.writerow(["NOOWW NEW"])
+                for buffer in data:
+                    writer.writerow({
+                        'user_id': buffer.user_id,
+                        'guid': buffer.guid,
+                        'platform': buffer.platform,
+                        '_modified': buffer._modified,
+                        'meta': buffer.meta
+                    })
+
         except Exception as err:
             print(err)
 
@@ -67,3 +72,18 @@ class Helper:
             print(f"Deleted existing file: {file_path}")
         else:
             print(f"No file to delete: {file_path}")
+
+    @staticmethod
+    def __get_model():
+        return {
+            'aircraft': Aircraft,
+            'airfield': Airfield,
+            'flight': Flight,
+            'imagepic': ImagePic,
+            'limitrules': LimitRules,
+            'myquery': MyQuery,
+            'myquerybuild': MyQueryBuild,
+            'pilot': Pilot,
+            'qualification': Qualification,
+            'settingconfig': SettingConfig
+        }
