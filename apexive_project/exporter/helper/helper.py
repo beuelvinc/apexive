@@ -1,6 +1,8 @@
 import os
+from itertools import chain
+from typing import List, Dict, Any
+
 from django.conf import settings
-from django.db.models import Q
 from pilotlog_app.models import Aircraft, Airfield, Flight, ImagePic, LimitRules, MyQuery, MyQueryBuild, Pilot, Qualification, SettingConfig
 
 
@@ -10,17 +12,24 @@ class Helper:
     This class serving helper role for service class
     """
 
-    def read_data_from_database(self) -> dict:
+    def read_data_from_database(self) -> list[dict[str, str | Any]]:
         return self.__read_data_from_database()
 
     @staticmethod
-    def __read_data_from_database() -> dict:
+    def __read_data_from_database() -> list[dict[str, str | Any]]:
         """
         Reads data from DB tables
         :return:
         """
         try:
-            return PilotData.objects.filter(Q(table="Aircraft") | Q(table="Flight")).all()
+            aircraft_queryset = Aircraft.objects.all()
+            flight_queryset = Flight.objects.all()
+            combined_queryset = list(chain(aircraft_queryset, flight_queryset))
+            data = [
+                {'model': 'Aircraft', 'data': obj.__dict__}
+                for obj in combined_queryset
+            ]
+            return data
         except Exception as err:
             print(err)
 
@@ -35,7 +44,8 @@ class Helper:
         self.__delete_if_exists(path_to_write)
         self.__export_data_to_csv(path_to_write, data)
 
-    def __export_data_to_csv(self, path: str, data: dict):
+    @staticmethod
+    def __export_data_to_csv(path: str, data: dict):
         """
         :param path: path of file to write data
         :param data: data from database
@@ -46,7 +56,8 @@ class Helper:
         except Exception as err:
             print(err)
 
-    def __delete_if_exists(self,file_path: str):
+    @staticmethod
+    def __delete_if_exists(file_path: str):
         """
         :param file_path: path of file to be deleted
         :return: None
