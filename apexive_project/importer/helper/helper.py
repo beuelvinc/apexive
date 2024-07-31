@@ -1,6 +1,6 @@
 import json
 import os
-from pilotlog_app.models import Aircraft, Flight
+from pilotlog_app.models import PilotData
 from django.conf import settings
 
 
@@ -24,24 +24,22 @@ class Helper:
         self.__insert_data_to_db(data)
 
     def __insert_data_to_db(self, data: dict) -> None:
-        for entry in data:
-            table = entry['table']
-            if table in self.__get_model():
-                model = self.__get_model()[table]
-                meta = entry['meta']
-                model.objects.create(
+        try:
+            for entry in data:
+                PilotData.objects.create(
                     user_id=entry['user_id'],
                     guid=entry['guid'],
                     platform=entry['platform'],
+                    table = entry['table'],
                     _modified=entry['_modified'],
-                    meta=meta
+                    meta=entry['meta']
                 )
-            else:
-                print(table, " Not found in DB")
+        except Exception as err:
+            print(err)
 
-    @staticmethod
-    def __get_model():
-        return {
-            'Aircraft': Aircraft,
-            'Flight': Flight
-        }
+    # @staticmethod
+    # def __get_model():
+    #     return {
+    #         'Aircraft': Aircraft,
+    #         'Flight': Flight
+    #     }

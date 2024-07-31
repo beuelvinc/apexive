@@ -2,7 +2,7 @@ from helper.helper import Helper
 
 class InsertData:
     """
-    This class inserts data to Aircraft and Flight table
+    This class inserts data to PilotData table
     """
     IMPORT_FILE_NAME = "import-pilotlog_mcc.json"
 

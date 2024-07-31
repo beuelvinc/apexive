@@ -1,21 +1,10 @@
 from django.db import models
-class Aircraft(models.Model):
+class PilotData(models.Model):
     user_id = models.IntegerField()
+    table = models.CharField(max_length=255)
     guid = models.UUIDField()
     platform = models.IntegerField()
     _modified = models.IntegerField()
 
     # Meta fields
     meta = models.JSONField()
-
-
-
-class Flight(models.Model):
-    user_id = models.IntegerField()
-    guid = models.UUIDField()
-    platform = models.IntegerField()
-    _modified = models.IntegerField()
-
-    # Meta fields
-    meta = models.JSONField()
-

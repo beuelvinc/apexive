@@ -1,4 +1,4 @@
 from django.contrib import admin
-from .models import Aircraft, Flight
+from .models import PilotData
 
-admin.site.register([Aircraft, Flight])
+admin.site.register([PilotData])
