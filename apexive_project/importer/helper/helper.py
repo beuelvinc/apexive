@@ -12,6 +12,11 @@ class Helper:
         return self.__read_data_from_file(file_name)
 
     def __read_data_from_file(self, file_name: str) -> dict:
+        """
+        Read data from given file
+        :param file_name: name of file to read
+        :return: data that read
+        """
         try:
             with open(os.path.join(settings.BASE_DIR, "0_data", file_name), encoding="utf-8") as f:
                 data = f.read().replace("\\", "")
@@ -24,6 +29,11 @@ class Helper:
         self.__insert_data_to_db(data)
 
     def __insert_data_to_db(self, data: dict) -> None:
+        """
+        Data to be inserted to database table
+        :param data: data that read from json file
+        :return: None
+        """
         try:
             for entry in data:
                 PilotData.objects.create(
@@ -37,9 +47,3 @@ class Helper:
         except Exception as err:
             print(err)
 
-    # @staticmethod
-    # def __get_model():
-    #     return {
-    #         'Aircraft': Aircraft,
-    #         'Flight': Flight
-    #     }
