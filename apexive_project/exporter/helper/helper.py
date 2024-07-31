@@ -1,10 +1,8 @@
-import json
 import os
-from typing import Callable
-
-from pilotlog_app.models import PilotData
 from django.conf import settings
 from django.db.models import Q
+from pilotlog_app.models import Aircraft, Airfield, Flight, ImagePic, LimitRules, MyQuery, MyQueryBuild, Pilot, Qualification, SettingConfig
+
 
 
 class Helper:
@@ -18,7 +16,7 @@ class Helper:
     @staticmethod
     def __read_data_from_database() -> dict:
         """
-        Reads data from PilotData table where  table_name is  Aircraft or Flight
+        Reads data from DB tables
         :return:
         """
         try:

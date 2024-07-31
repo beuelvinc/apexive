@@ -1,6 +1,6 @@
 import json
 import os
-from pilotlog_app.models import PilotData
+from pilotlog_app.models import Aircraft, Airfield, Flight, ImagePic, LimitRules, MyQuery, MyQueryBuild, Pilot, Qualification, SettingConfig
 from django.conf import settings
 
 
@@ -36,14 +36,32 @@ class Helper:
         """
         try:
             for entry in data:
-                PilotData.objects.create(
-                    user_id=entry['user_id'],
-                    guid=entry['guid'],
-                    platform=entry['platform'],
-                    table = entry['table'],
-                    _modified=entry['_modified'],
-                    meta=entry['meta']
-                )
+                # Convert table name to lowercase for case-insensitive matching
+                table_name = entry['table'].lower()
+                model = self.__get_model().get(table_name)
+                if model:
+                    model.objects.create(
+                        user_id=entry['user_id'],
+                        guid=entry['guid'],
+                        platform=entry['platform'],
+                        _modified=entry['_modified'],
+                        meta=entry['meta']
+                    )
+                else:
+                    print(f"No model found for table name: {entry['table']}")
         except Exception as err:
             print(err)
-
+    @staticmethod
+    def __get_model():
+        return {
+            'aircraft': Aircraft,
+            'airfield': Airfield,
+            'flight': Flight,
+            'imagepic': ImagePic,
+            'limitrules': LimitRules,
+            'myquery': MyQuery,
+            'myquerybuild': MyQueryBuild,
+            'pilot': Pilot,
+            'qualification': Qualification,
+            'settingconfig': SettingConfig
+        }

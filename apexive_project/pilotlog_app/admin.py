@@ -1,4 +1,15 @@
 from django.contrib import admin
-from .models import PilotData
+from .models import *
 
-admin.site.register([PilotData])
+admin.site.register([
+    Aircraft,
+    Airfield,
+    Flight,
+    ImagePic,
+    LimitRules,
+    MyQuery,
+    MyQueryBuild,
+    Pilot,
+    Qualification,
+    SettingConfig
+])
