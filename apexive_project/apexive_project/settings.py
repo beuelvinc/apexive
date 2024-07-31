@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY",'deb]v')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -31,6 +31,7 @@ if os.getenv("IS_DEV"):
 else:
     ALLOWED_HOSTS = [] #TBD
 
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240 # this is for dev, remove this after
 
 
 # Application definition
@@ -82,10 +83,10 @@ WSGI_APPLICATION = 'apexive_project.wsgi.application'
 DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.postgresql',
-       'NAME': os.getenv("NAME"),
-       'USER': os.getenv("USER"),
-       'PASSWORD': os.getenv("PASSWORD"),
-       'HOST': os.getenv("HOST"),
+       'NAME': os.getenv("NAME", "postgres"),
+       'USER': os.getenv("USER", "USER"),
+       'PASSWORD': os.getenv("PASSWORD", "PASSWORD"),
+       'HOST': os.getenv("HOST", "127.0.0.1"),
        'PORT': os.getenv("PORT"),
    }
 }
