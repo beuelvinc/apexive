@@ -9,7 +9,7 @@ class ExportData:
     def __init__(self):
         self.helper = Helper()
 
-    def insert(self) -> None:
+    def export(self) -> None:
         data = self.helper.read_data_from_database()
         self.helper.export_data_to_csv(data, ExportData.IMPORT_FILE_NAME)
 

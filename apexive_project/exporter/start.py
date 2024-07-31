@@ -1,4 +1,4 @@
-from service.export import InsertData
+from service.export import ExportData
 
 if __name__ == "__main__":
-    InsertData().export()
+    ExportData().export()

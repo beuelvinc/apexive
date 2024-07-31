@@ -12,8 +12,8 @@ class Helper:
     This class serving helper role for service class
     """
 
-    def read_data_from_database(self) -> Callable[[], dict]:
-        return self.__read_data_from_database
+    def read_data_from_database(self) -> dict:
+        return self.__read_data_from_database()
 
     @staticmethod
     def __read_data_from_database() -> dict:
@@ -22,11 +22,11 @@ class Helper:
         :return:
         """
         try:
-            return PilotData.objects.filter(Q(table="Aircraft") | Q(table="Flight"))
+            return PilotData.objects.filter(Q(table="Aircraft") | Q(table="Flight")).all()
         except Exception as err:
             print(err)
 
-    def export_data_to_csv(self, file_name: str, data: dict):
+    def export_data_to_csv(self, data: dict, file_name: str,):
         """
 
         :param file_name: name of file to write
@@ -35,7 +35,7 @@ class Helper:
         """
         path_to_write = os.path.join(settings.BASE_DIR, "0_data", file_name)
         self.__delete_if_exists(path_to_write)
-        self.__export_data_to_csv(file_name, data)
+        self.__export_data_to_csv(path_to_write, data)
 
     def __export_data_to_csv(self, path: str, data: dict):
         """
@@ -44,7 +44,7 @@ class Helper:
         :return: None
         """
         try:
-            pass
+            print(data)
         except Exception as err:
             print(err)
 
