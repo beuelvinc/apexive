@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'pilotlog_app'
+    'pilotlog_app',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
