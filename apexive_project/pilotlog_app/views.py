@@ -62,7 +62,7 @@ class BaseModelViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def search(self, request, *args, **kwargs):
         search_query = request.query_params.get('search', '')
-        table_name = request.query_params.get('table_name', '').lower()
+        table_name = kwargs.get('table_name', '').lower()
         model = self.model_mapping.get(table_name)
 
         if model:
